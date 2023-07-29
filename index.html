@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gender Reveal Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .question {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Gender Reveal Quiz</h1>
+    <div id="game">
+        <!-- Questions will be inserted here -->
+    </div>
+    <button onclick="checkAnswers()">Reveal the Gender</button>
+
+    <script>
+        var questions = [
+            { question: 'Quels sont les prénoms des futurs parents ?', options: ['Cyril et Laydyvine', 'Pierre et Marie', 'Jean et Sophie'], correct: 0, type: 'multipleChoice' },
+            { question: 'Quelle est la date de PACS de Cyril et Laydyvine ?', options: ['12/07/2012', '16/08/2013', '25/12/2014'], correct: 1, type: 'multipleChoice' },
+            { question: 'Où est-ce que Cyril et Laydyvine se sont rencontrés pour la première fois ?', options: ['Lille', 'Paris', 'Marcq en Baroeul'], correct: 2, type: 'multipleChoice' },
+            { question: 'Quelle est la destination de voyage préférée de Cyril et Laydyvine ?', options: ['La plage', 'Les montagnes', 'La campagne'], correct: 1, type: 'multipleChoice' },
+            { question: 'Quel est le premier animal de compagnie que Cyril et Laydyvine ont eu ensemble ?', options: ['Chat', 'Chien', 'Poisson'], correct: 1, type: 'multipleChoice' },
+            { question: 'Quel est le prénom de la mère de Cyril ?', answer: 'Martine', type: 'text' },
+            { question: 'Quel est le prénom du père de Laydyvine ?', answer: 'Pascal', type: 'text' },
+            { question: 'Dans quelle ville Cyril et Laydyvine ont-ils acheté leur première maison ?', options: ['Paris', 'Lyon', 'Saint-Dizier'], correct: 2, type: 'multipleChoice' },
+            { question: 'Quelle est la série télé préférée de Cyril ?', options: ['Game of Thrones', 'Doctor Who', 'Breaking Bad'], correct: 1, type: 'multipleChoice' },
+            { question: 'Quel est le troisième prénom de Laydyvine ?', answer: 'Louise', type: 'text' }
+        ];
+
+        var gameElement = document.getElementById('game');
+
+        questions.forEach(function(question, index) {
+            var questionElement = document.createElement('div');
+            questionElement.classList.add('question');
+
+            var questionText = document.createElement('p');
+            questionText.textContent = question.question;
+            questionElement.appendChild(questionText);
+
+            if (question.type === 'multipleChoice') {
+                question.options.forEach(function(option, optionIndex) {
+                    var optionInput = document.createElement('input');
+                    optionInput.setAttribute('type', 'radio');
+                    optionInput.setAttribute('name', 'question' + index);
+                    optionInput.setAttribute('value', optionIndex);
+                    questionElement.appendChild(optionInput);
+
+                    var optionLabel = document.createElement('label');
+                    optionLabel.textContent = option;
+                    questionElement.appendChild(optionLabel);
+
+                    questionElement.appendChild(document.createElement('br'));
+                });
+            } else if (question.type === 'text') {
+                var answerInput = document.createElement('input');
+                answerInput.setAttribute('id', 'answer' + index);
+                questionElement.appendChild(answerInput);
+            }
+
+            gameElement.appendChild(questionElement);
+        });
+
+        function checkAnswers() {
+            var correctAnswers = 0;
+
+            questions.forEach(function(question, index) {
+                if (question.type === 'multipleChoice') {
+                    var selectedOption = document.querySelector('input[name="question' + index + '"]:checked').value;
+                    if (parseInt(selectedOption) === question.correct) {
+                        correctAnswers++;
+                    }
+                } else if (question.type === 'text') {
+                    var answer = document.getElementById('answer' + index).value;
+                    if (answer.toLowerCase() === question.answer.toLowerCase()) {
+                        correctAnswers++;
+                    }
+                }
+            });
+
+            if (correctAnswers === questions.length) {
+                alert('Félicitations ! C\'est une fille.');
+            } else {
+                alert('Certaines réponses sont incorrectes. Essayez encore !');
+            }
+        }
+    </script>
+</body>
+</html>
